@@ -1,0 +1,55 @@
+<?php
+$this->title = "";
+$this->headTitle($this->title);
+
+?>
+
+<table class="table">
+    <thead>
+    </thead>
+    <tbody>
+        <?php
+  if(isset($this->dataInfosPays)){
+	foreach ($this->dataInfosPays as $a){
+		echo "<img height=200px src='$a->_sCountryFlag' />";
+	  ?>
+        <br><br>
+        <tr>
+            <th scope="row">Nom</th>
+            <td><?php echo $a->_sName ?></td>
+        </tr>
+        <tr>
+            <th scope="row">Code ISO</th>
+            <td><?php echo $a->_sISOCode ?></td>
+        </tr>
+        <tr>
+            <th scope="row">Capitale</th>
+            <td><?php echo $a->_sCapitalCity ?></td>
+        </tr>
+        <tr>
+            <th scope="row">Numéro de référence</th>
+            <td><?php echo $a->_sPhoneCode ?></td>
+        </tr>
+        <tr>
+            <th scope="row">Monnaie</th>
+            <td><?php echo $a->_sCurrencyISOCode ?></td>
+        </tr>
+        <tr>
+            <th scope="row">Languages</th>
+            <td><?php
+	  $total = count($a->_language);
+	  if($total==2){
+		echo $a->_language[1];
+	  }
+	  else{
+		foreach ($a->_language as $b){
+			echo "$b\t";
+		 }
+	  }
+	   ?>
+            </td>
+        </tr>
+
+        <?php	}}	?>
+    </tbody>
+</table>
