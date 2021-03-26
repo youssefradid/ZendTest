@@ -10,6 +10,26 @@ $this->headTitle($this->title);
     }
 </style>
 
+
+
+<?php
+
+if(isset($_GET['page']) && !empty($_GET['page'])){
+    $currentPage = ($_GET['page']);
+}else{
+    $currentPage = 1;
+}
+
+
+$nbpays = sizeof($this->dataPays);
+$parPage = 12;
+// On calcule le nombre de pages total
+$pages = ceil($nbpays / $parPage);
+// Calcul du 1er article de la page
+$premier = ($currentPage * $parPage) - $parPage;
+
+?>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-2">
@@ -26,11 +46,43 @@ $this->headTitle($this->title);
                         <?=$a->_sName?></label>
                     </div>
                     <?php } ?>
-                </fieldset>    
+                </fieldset>
                 <button class="btn btn-primary btn-block btn-sm" type="submit">Appliquer</button>
             </form>
         </div>
+
+<?php
+
+$this->dataPays=array_slice($this->dataPays, $premier, $parPage);
+
+?>
+
         <div class="col-lg-10">
+        <div class="row d-flex justify-content-center mt-4">
+            <nav>
+                <ul class="pagination">
+                    <!-- Lien vers la page précédente (désactivé si on se trouve sur la 1ère page) -->
+                    <li class="page-item <?= ($currentPage == 1) ? "disabled" : "" ?>">
+                        <a href="?page=<?= $currentPage - 1 ?>" class="page-link">Précédente</a>
+                    </li>
+                    <?php
+                        for($page = $currentPage>5 ? $currentPage-4 : 1; $page <= ($currentPage<$pages ? $currentPage+4 : $pages); $page++){
+                        ?>
+                        <!-- Lien vers chacune des pages (activé si on se trouve sur la page correspondante) -->
+                        <li class="page-item <?= ($currentPage == $page) ? "active" : "" ?>">
+                            <a href="?page=<?= $page ?>" class="page-link"><?= $page ?></a>
+                        </li>
+                    <?php
+                    }
+                    
+                    ?>
+                        <!-- Lien vers la page suivante (désactivé si on se trouve sur la dernière page) -->
+                        <li class="page-item <?= ($currentPage == $pages) ? "disabled" : "" ?>">
+                        <a href="?page=<?= $currentPage + 1 ?>" class="page-link">Suivante</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
             <div class="row">
                 <?php foreach ($this->dataPays as $a) { ?>
                     <div class="col-lg-3 mb-4 mt-4">
@@ -51,8 +103,33 @@ $this->headTitle($this->title);
                             </div>
                         </div>
                     </div>
-                <?php } ?>    
+                <?php } ?>
             </div>
+            <div class="row d-flex justify-content-center mb-4">
+            <nav>
+                <ul class="pagination">
+                    <!-- Lien vers la page précédente (désactivé si on se trouve sur la 1ère page) -->
+                    <li class="page-item <?= ($currentPage == 1) ? "disabled" : "" ?>">
+                        <a href="?page=<?= $currentPage - 1 ?>" class="page-link">Précédente</a>
+                    </li>
+                    <?php
+                        for($page = $currentPage>5 ? $currentPage-4 : 1; $page <= ($currentPage<$pages ? $currentPage+4 : $pages); $page++){
+                        ?>
+                        <!-- Lien vers chacune des pages (activé si on se trouve sur la page correspondante) -->
+                        <li class="page-item <?= ($currentPage == $page) ? "active" : "" ?>">
+                            <a href="?page=<?= $page ?>" class="page-link"><?= $page ?></a>
+                        </li>
+                    <?php
+                    }
+                    
+                    ?>
+                        <!-- Lien vers la page suivante (désactivé si on se trouve sur la dernière page) -->
+                        <li class="page-item <?= ($currentPage == $pages) ? "disabled" : "" ?>">
+                        <a href="?page=<?= $currentPage + 1 ?>" class="page-link">Suivante</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
         </div>
     </div>
 </div>
