@@ -3,102 +3,56 @@ $this->title = "";
 $this->headTitle($this->title);
 ?>
 
-<div class="container">
+<style>
+    .filter {
+        position: sticky;
+        top: 50px;
+    }
+</style>
+
+<div class="container-fluid">
     <div class="row">
-        <div class="col">
-
-            <form class="form-inline my-2 my-lg-0" method="POST">
-                <input name="search" class="form-control mr-sm-2" type="search" placeholder="Search"
-                    aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        <div class="col-lg-2">
+            <form class="filter mt-5" method="POST">
+                <div class="form-group">
+                    <input name="search" class="form-control mr-sm-2" type="search" placeholder="Recherche"aria-label="Search">
+                </div>
+                <fieldset class="form-group">
+                    <legend class="col-form-label">Continents</legend>
+                    <?php foreach ($this->data as $a){ ?>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" name="continents[]" value=<?=$a->_sCode?>>
+                        <?=$a->_sName?></label>
+                    </div>
+                    <?php } ?>
+                </fieldset>    
+                <button class="btn btn-primary btn-block btn-sm" type="submit">Appliquer</button>
             </form>
-
-
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col" style='text-align: center;'>Les Continents</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
- echo "<tr>";
-echo "<td style='text-align: center;'>";
-foreach ($this->data as $a){
-    echo "<a class='card-title' href='countries?cont=$a->_sCode'>";
-    echo "<div class='card mb-3' style='height:100px;width:150px'>";
-    echo "<div class='card-body'>";
-    echo "<h5 class='card-title'>$a->_sName</h5>";
-    echo "</div>";
-    echo "</div>";
-    echo "</a>";
-}
-echo "</td>";
-echo "</tr>";
-?>
-                </tbody>
-            </table>
+        </div>
+        <div class="col-lg-10">
+            <div class="row">
+                <?php foreach ($this->dataPays as $a) { ?>
+                    <div class="col-lg-3 mb-4 mt-4">
+                        <div class="card mb-3 shadow-lg mb-5 bg-white rounded" style="height: 410px;">
+                        <img class="card-img-top" style="max-height:143px; height:143px" src=<?=$a->_sCountryFlag?> alt="Card image cap">
+                            <div class="card-header font-weight-bold"><?=$a->_sName?></div>
+                            <div class="card-body text-dark">
+                                <p><b>Capitale:</b> <?=$a->_sCapitalCity?></p>
+                                <p style="font-size: 14px;"><b>Phone Code:</b> <?=$a->_sPhoneCode?></p>
+                                <p style="font-size: 14px;"><b>Langages:</b>
+                                <?php
+                                    foreach($a->_language as $l) {
+                                        echo $l->sName;
+                                    }
+                                    ?>
+                                <p style="font-size: 14px;"><b>Continent:</b> <?=$a->_CCode?>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>    
+            </div>
         </div>
     </div>
-    <div class="row">
-        <?php
-?>
-        <?php
-echo "<div class='container'>";
-if(isset($this->dataPays)){
-foreach ($this->dataPays as $a){
-    echo "<a class='card-title' href='pays-info?nom=$a->_sISOCode'>";
-    echo "<div class='card mb-3' style='height:250px;width:300px'>";
-    echo "<img  class='card-img-top' src='$a->_sCountryFlag' href='pays-info?nom=$a->_sISOCode'/>";
-    echo "<div class='card-body'>";
-    echo "<h5 class='card-title'>$a->_sName</h5>";
-    echo "</div>";
-    echo "</div>";
-    echo "</a>";
-}
-}
-echo "<div>";
-
-?>
-    </div>
 </div>
-</div>
-<style>
-.card {
-    background: #fff;
-    border-radius: 2px;
-    display: inline-block;
-    height: 300px;
-    padding: 10px;
-    margin: 30px;
-    position: relative;
-    width: 300px;
-    text-align: center;
-    transition: transform 0.5s;
-}
-
-.card::after {
-
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    transition: opacity 2s cubic-bezier(0.165, 0.84, 0.44, 1);
-    box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.15);
-    content: "";
-    opacity: 0;
-    z-index: -1;
-}
-
-.card:hover,
-.card:focus {
-    transform: scale3d(1.006, 1.006, 1);
-    background-color: #F0FBF7;
-}
-
-.card:hover::after,
-.card:focus::after {
-    opacity: 1;
-}
-</style>

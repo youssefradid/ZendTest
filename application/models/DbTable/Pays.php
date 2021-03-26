@@ -82,7 +82,7 @@ class Application_Model_DbTable_Pays implements Application_Model_DbTable_SoapSe
 /***** languages  ******/
 
 public function getLanguages() {
-    return $this->$_language;
+    return $this->_language;
 }
 
 public function setLanguages($_language) {
@@ -91,11 +91,8 @@ public function setLanguages($_language) {
 
 public function CallApi(){
     $listPays = array();
+    $languages = array();
     $client = new Zend_Soap_Client('http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso?WSDL');
-    $client->FullCountryInfoAllCountries()
-                    ->FullCountryInfoAllCountriesResult
-                    ->tCountryInfo;
-
     $conti = $client->FullCountryInfoAllCountries()
                     ->FullCountryInfoAllCountriesResult
                     ->tCountryInfo;
@@ -105,6 +102,17 @@ public function CallApi(){
         $pays->setCCode($a->sContinentCode);
         $pays->setCountryFlag($a->sCountryFlag);
         $pays->setISOCode($a->sISOCode);
+        $pays->setCapitalCity($a->sCapitalCity);
+        $pays->setPhoneCode($a->sPhoneCode);
+        $pays->setCurrencyISOCode($a->sCurrencyISOCode);
+        if(isset($a->Languages->tLanguage)){
+            $t = [];
+            if(isset($a->Languages->tLanguage) && is_array($a->Languages->tLanguage))
+                $t = $a->Languages->tLanguage;
+            else if(isset($a->Languages->tLanguage))  
+                $t = [$a->Languages->tLanguage];
+            $pays->setLanguages($t);
+        }
         array_push($listPays, $pays);
         }
         return $listPays;
